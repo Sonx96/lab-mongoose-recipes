@@ -7,63 +7,57 @@ const data = require("./data");
 
 const MONGODB_URI = "mongodb://127.0.0.1:27017/recipe-app";
 
-
 // Connection to the database "recipe-app"
+
+const deleteDB = async () => {
+  try {
+    await Recipe.deleteMany();
+  } catch (e) {
+    console.log(e);
+  }
+};
 const connection = async () => {
   try {
-    await mongoose.connect(MONGODB_URI)
-    const recipe =  await Recipe.create( {
-      title: "Asian Glazed Chicken Thighs",
-      level: "Amateur Chef",
+    await mongoose.connect(MONGODB_URI);
+    const recipe = await Recipe.create({
+      title: "steak",
+      level: "Easy Peasy",
       ingredients: [
-        "1/2 cup rice vinegar",
-        "5 tablespoons honey",
-        "1/3 cup soy sauce (such as Silver Swan®)",
-        "1/4 cup Asian (toasted) sesame oil",
-        "3 tablespoons Asian chili garlic sauce",
-        "3 tablespoons minced garlic",
-        "salt to taste",
-        "8 skinless, boneless chicken thighs"
+        "season steak generously with salt, pepper and garlic powder",
+        "place in zip lock bag",
+        "cook in sous vide at 120 F for 1-2 hours",
+        "remove from bag and pat dry",
+        "heat pan with grapeseed oil and a quarter stick of butter",
+        "cook steak for 30-60 seconds per side using a spoon to baste with butter",
+        "rest for 10 minutes",
+        "enjoy",
       ],
-      cuisine: "Asian",
+      cuisine: "Student Flat",
       dishType: "main_course",
-      image: "https://images.media-allrecipes.com/userphotos/720x405/815964.jpg",
-      duration: 40,
-      creator: "Chef LePapu"
-    } )
-    console.log(recipe)
-  } catch(err) {
-    console.log(err)
+      image: "https://i.imgur.com/4h2k9MD.jpg",
+      duration: 10,
+      creator: "Chef LeJasac",
+    });
+    console.log(recipe);
+    const printAllRecipes = await Recipe.insertMany(data);
+    printAllRecipes.forEach((eachRecipe) => {
+      console.log(eachRecipe.title);
+    });
+    const updateRecipe = await Recipe.findOneAndUpdate(
+      {
+        title: "Rigatoni alla Genovese",
+      },
+      {
+        duration: 100,
+      },
+      {
+        new: true,
+      }
+    );
+    console.log(updateRecipe);
+  } catch (err) {
+    console.log(err);
   }
-}
-connection()
-//   .then((x) => {
-//     console.log(`Connected to the database: "${x.connection.name}"`);
-//     // Before adding any recipes to the database, let's remove all existing ones
-//     return Recipe.deleteMany();
-//   })
-//   .then((response) => {
-//     const recipe = Recipe.create( {
-//       title: "Asian Glazed Chicken Thighs",
-//       level: "Amateur Chef",
-//       ingredients: [
-//         "1/2 cup rice vinegar",
-//         "5 tablespoons honey",
-//         "1/3 cup soy sauce (such as Silver Swan®)",
-//         "1/4 cup Asian (toasted) sesame oil",
-//         "3 tablespoons Asian chili garlic sauce",
-//         "3 tablespoons minced garlic",
-//         "salt to taste",
-//         "8 skinless, boneless chicken thighs"
-//       ],
-//       cuisine: "Asian",
-//       dishType: "main_course",
-//       image: "https://images.media-allrecipes.com/userphotos/720x405/815964.jpg",
-//       duration: 40,
-//       creator: "Chef LePapu"
-//     } )
-//     console.log(recipe)
-// })
-//   .catch((error) => {
-//     console.error("Error connecting to the database", error);
-//   });
+};
+deleteDB();
+connection();
