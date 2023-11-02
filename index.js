@@ -55,6 +55,9 @@ const connection = async () => {
       }
     );
     console.log(updateRecipe);
+    await Recipe.deleteOne({ title: "Carrot Cake" });
+    console.log("Deleted Carrot Cake");
+    await mongoose.connection.close();
   } catch (err) {
     console.log(err);
   }
